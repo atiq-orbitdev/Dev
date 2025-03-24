@@ -68,3 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Connecting to the Server
+
+To connect to the server running at `localhost:5049`, follow these steps:
+
+1. Ensure the server is running on your local machine at port 5049.
+2. The React application will automatically attempt to connect to the server when it starts.
+3. If the connection is successful, you will see a message in the console indicating that the connection was established.
+
+### Handling Connection Errors and Retries
+
+The server connection logic includes error handling and retries. If the connection attempt fails, it will retry up to 5 times. If the maximum number of retries is reached, an error message will be displayed in the console.
+
