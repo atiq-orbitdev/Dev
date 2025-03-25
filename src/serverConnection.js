@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const connectToServer = async () => {
-  const url = 'http://localhost:5049';
+  const url = 'http://localhost:5049/weatherforecast';
   const maxRetries = 5;
   let attempts = 0;
 
