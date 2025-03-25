@@ -4,6 +4,7 @@ const ToDoGrid = () => {
   const [toDoItems, setToDoItems] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [newItem, setNewItem] = useState({ title: '', IsComplete: false });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
   const url = 'http://localhost:5049/todo/incomplete';
   const deleteUrl = 'http://localhost:5049/todo'; // Base URL for delete API
@@ -61,6 +62,24 @@ const ToDoGrid = () => {
     }
   };
 
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedItems = [...toDoItems].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
+
   return (
     <div className="todo-grid">
       <h2>To-Do List</h2>
@@ -68,16 +87,14 @@ const ToDoGrid = () => {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Status</th>
+            <th onClick={() => handleSort('title')}>Title</th>
+            <th onClick={() => handleSort('IsComplete')}>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {toDoItems.map((item) => (
+          {sortedItems.map((item) => (
             <tr key={item.id}>
-              <td>{item.id}</td>
               <td>{item.title}</td>
               <td>{item.IsComplete ? 'Completed' : 'Pending'}</td>
               <td>
