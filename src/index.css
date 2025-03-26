@@ -30,9 +30,12 @@ code {
 
 .todo-grid th {
   background-color: #f4f4f4;
+  cursor: pointer;
 }
 
 .todo-grid button {
+  display: block;
+  margin: 10px 0;
   background-color: #ff4d4d;
   color: white;
   border: none;
@@ -43,6 +46,13 @@ code {
 
 .todo-grid button:hover {
   background-color: #ff1a1a;
+}
+
+.todo-grid h2 {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 button {

@@ -80,6 +80,13 @@ const ToDoGrid = () => {
     return 0;
   });
 
+  const getSortArrow = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'ascending' ? ' ↑' : ' ↓';
+    }
+    return '';
+  };
+
   return (
     <div className="todo-grid">
       <h2>To-Do List</h2>
@@ -87,8 +94,12 @@ const ToDoGrid = () => {
       <table>
         <thead>
           <tr>
-            <th onClick={() => handleSort('title')}>Title</th>
-            <th onClick={() => handleSort('IsComplete')}>Status</th>
+            <th onClick={() => handleSort('title')}>
+              Title{getSortArrow('title')}
+            </th>
+            <th onClick={() => handleSort('IsComplete')}>
+              Status{getSortArrow('IsComplete')}
+            </th>
             <th>Actions</th>
           </tr>
         </thead>
