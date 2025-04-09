@@ -6,6 +6,7 @@ const ToDoGrid = () => {
   const [newItem, setNewItem] = useState({ title: '', IsComplete: false });
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [editItem, setEditItem] = useState(null); // New state variable for managing the item being edited
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // New state for success message
 
   const url = 'http://localhost:5049/todo/incomplete';
   const deleteUrl = 'http://localhost:5049/todo'; // Base URL for delete API
@@ -74,8 +75,7 @@ const ToDoGrid = () => {
       if (response.ok) {
         const updatedItem = await response.json();
         setToDoItems(toDoItems.map((item) => (item.id === updatedItem.id ? updatedItem : item)));
-        setShowPopup(false);
-        setEditItem(null);
+        setShowSuccessMessage(true); // Show success message
         console.log('Updated item:', updatedItem);
       } else {
         console.error('Failed to update item');
@@ -108,6 +108,12 @@ const ToDoGrid = () => {
       return sortConfig.direction === 'ascending' ? ' ↑' : ' ↓';
     }
     return '';
+  };
+
+  const handleOk = () => {
+    setShowSuccessMessage(false); // Hide success message
+    setShowPopup(false); // Close popup
+    setEditItem(null); // Reset edit item
   };
 
   return (
@@ -143,39 +149,48 @@ const ToDoGrid = () => {
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
-            <h3>{editItem ? 'Update To-Do Item' : 'Add New To-Do Item'}</h3>
-            <label>
-              Title:
-              <input
-                type="text"
-                value={editItem ? editItem.title : newItem.title}
-                onChange={(e) => {
-                  if (editItem) {
-                    setEditItem({ ...editItem, title: e.target.value });
-                  } else {
-                    setNewItem({ ...newItem, title: e.target.value });
-                  }
-                }}
-              />
-            </label>
-            <label>
-              Completed:
-              <input
-                type="checkbox"
-                checked={editItem ? editItem.IsComplete : newItem.IsComplete}
-                onChange={(e) => {
-                  if (editItem) {
-                    setEditItem({ ...editItem, IsComplete: e.target.checked });
-                  } else {
-                    setNewItem({ ...newItem, IsComplete: e.target.checked });
-                  }
-                }}
-              />
-            </label>
-            <div className="popup-actions">
-              <button onClick={() => { setShowPopup(false); setEditItem(null); }}>Cancel</button>
-              <button onClick={editItem ? handleUpdate : handleAdd}>Save</button>
-            </div>
+            {showSuccessMessage ? (
+              <div>
+                <p>To Do Item updated</p>
+                <button onClick={handleOk}>Ok</button>
+              </div>
+            ) : (
+              <>
+                <h3>{editItem ? 'Update To-Do Item' : 'Add New To-Do Item'}</h3>
+                <label>
+                  Title:
+                  <input
+                    type="text"
+                    value={editItem ? editItem.title : newItem.title}
+                    onChange={(e) => {
+                      if (editItem) {
+                        setEditItem({ ...editItem, title: e.target.value });
+                      } else {
+                        setNewItem({ ...newItem, title: e.target.value });
+                      }
+                    }}
+                  />
+                </label>
+                <label>
+                  Completed:
+                  <input
+                    type="checkbox"
+                    checked={editItem ? editItem.IsComplete : newItem.IsComplete}
+                    onChange={(e) => {
+                      if (editItem) {
+                        setEditItem({ ...editItem, IsComplete: e.target.checked });
+                      } else {
+                        setNewItem({ ...newItem, IsComplete: e.target.checked });
+                      }
+                    }}
+                  />
+                </label>
+                <div className="popup-actions">
+                  <button onClick={() => { setShowPopup(false); setEditItem(null); }}>Cancel</button>
+                  <button onClick={editItem ? handleUpdate : handleAdd}>Save</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
